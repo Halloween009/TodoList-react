@@ -1,7 +1,7 @@
 import React from "react";
 import { Task } from "./Task";
 
-const TaskList = ({ tasks }) => {
+const TaskList = ({ tasks, onToggle, onEdit, onDelete, onSave }) => {
   return (
     <ul className="todo-list">
       {tasks.map((task) => (
@@ -10,6 +10,11 @@ const TaskList = ({ tasks }) => {
           completed={task.completed}
           created={task.created}
           description={task.description}
+          editing={task.editing}
+          onToggle={() => onToggle(task.id)}
+          onEdit={() => onEdit(task.id)}
+          onDelete={() => onDelete(task.id)}
+          onSave={(newDescription) => onSave(task.id, newDescription)}
         />
       ))}
     </ul>
