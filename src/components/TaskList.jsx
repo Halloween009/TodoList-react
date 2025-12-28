@@ -1,7 +1,14 @@
 import React from "react";
 import { Task } from "./Task";
 
-const TaskList = ({ tasks, onToggle, onEdit, onDelete, onSave }) => {
+const TaskList = ({
+  tasks,
+  onToggle,
+  onEdit,
+  onDelete,
+  onSave,
+  onCancelEdit,
+}) => {
   return (
     <ul className="todo-list">
       {tasks.map((task) => (
@@ -15,6 +22,7 @@ const TaskList = ({ tasks, onToggle, onEdit, onDelete, onSave }) => {
           onEdit={() => onEdit(task.id)}
           onDelete={() => onDelete(task.id)}
           onSave={(newDescription) => onSave(task.id, newDescription)}
+          onCancelEdit={() => onCancelEdit(task.id)}
         />
       ))}
     </ul>

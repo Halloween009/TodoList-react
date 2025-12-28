@@ -5,45 +5,39 @@ import NewTaskForm from "./components/NewTaskForm";
 import "./App.css";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      description: "Complete React project",
-      created: new Date(2025, 11, 11, 10, 0),
+  const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState("all");
+
+  const addTask = (description) => {
+    const newTask = {
+      id: Date.now(),
+      description: description,
       completed: false,
       editing: false,
-    },
-    {
-      id: 2,
-      description: "Learn useState hook",
-      created: new Date(2025, 11, 12, 8, 30),
-      completed: false,
-      editing: false,
-    },
-    {
-      id: 3,
-      description: "Build TODO app",
-      created: new Date(2025, 11, 12, 9, 15),
-      completed: false,
-      editing: false,
-    },
-  ]);
+      created: new Date(),
+    };
+    setTasks([newTask, ...tasks]);
+  };
 
   const toggleTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
   };
 
   const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+
+  const clearCompleted = () => {
+    setTasks((prevTasks) => prevTasks.filter((task) => !task.completed));
   };
 
   const editTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
         task.id === id
           ? { ...task, editing: true }
           : { ...task, editing: false }
@@ -52,8 +46,8 @@ function App() {
   };
 
   const saveTask = (id, newDescription) => {
-    setTasks(
-      tasks.map((task) =>
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
         task.id === id
           ? { ...task, description: newDescription, editing: false }
           : task
@@ -61,20 +55,57 @@ function App() {
     );
   };
 
+  const cancelEdit = (id) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, editing: false } : task
+      )
+    );
+  };
+
   const itemsLeft = tasks.filter((task) => !task.completed).length;
+
+  const showAllTasks = () => {
+    setFilter("all");
+  };
+  const showActiveTasks = () => {
+    setFilter("active");
+  };
+  const showCompletedTasks = () => {
+    setFilter("completed");
+  };
+
+  const getFilteredTasks = () => {
+    switch (filter) {
+      case "active":
+        return tasks.filter((task) => !task.completed);
+      case "completed":
+        return tasks.filter((task) => task.completed);
+      default:
+        return tasks;
+    }
+  };
+  const filteredTasks = getFilteredTasks();
 
   return (
     <section className="todoapp">
-      <NewTaskForm />
+      <NewTaskForm onCreate={addTask} />
       <section className="main">
         <TaskList
-          tasks={tasks}
+          tasks={filteredTasks}
           onToggle={toggleTask}
           onDelete={deleteTask}
           onEdit={editTask}
           onSave={saveTask}
+          onCancelEdit={cancelEdit}
         />
-        <Footer itemCount={itemsLeft} />
+        <Footer
+          itemCount={itemsLeft}
+          onFilterAll={showAllTasks}
+          onFilterActive={showActiveTasks}
+          onFilterCompleted={showCompletedTasks}
+          clearCompleted={clearCompleted}
+        />
       </section>
     </section>
   );

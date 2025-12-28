@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { formatDistanceToNow } from "date-fns";
 
 export const Task = ({
@@ -10,12 +10,23 @@ export const Task = ({
   onEdit,
   onDelete,
   onSave,
+  onCancelEdit,
 }) => {
   const timeFormat = formatDistanceToNow(created, { addSuffix: true });
+  const editInputRef = useRef(null);
+
+  useEffect(() => {
+    if (editing && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  }, [editing]);
 
   const handleSave = (e) => {
     if (e.key === "Enter") {
       onSave(e.target.value);
+    }
+    if (e.key === "Escape") {
+      onCancelEdit();
     }
   };
 
@@ -41,8 +52,10 @@ export const Task = ({
       <input
         type="text"
         className="edit"
+        ref={editInputRef}
         defaultValue={description}
         onKeyDown={handleSave}
+        onBlur={onCancelEdit}
       />
     </li>
   );
