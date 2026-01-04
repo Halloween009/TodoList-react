@@ -104,6 +104,7 @@ function App() {
           onFilterAll={showAllTasks}
           onFilterActive={showActiveTasks}
           onFilterCompleted={showCompletedTasks}
+          currentFilter={filter}
           clearCompleted={clearCompleted}
         />
       </section>
