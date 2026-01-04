@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { formatDistanceToNow } from "date-fns";
+import PropTypes from "prop-types";
 
 export const Task = ({
   completed,
@@ -59,4 +60,21 @@ export const Task = ({
       />
     </li>
   );
+};
+
+Task.propTypes = {
+  completed: PropTypes.bool.isRequired,
+  created: PropTypes.instanceOf(Date).isRequired,
+  description: PropTypes.string.isRequired,
+  editing: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onCancelEdit: PropTypes.func.isRequired,
+};
+
+Task.defaultProps = {
+  completed: false,
+  editing: false,
 };

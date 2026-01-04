@@ -1,5 +1,6 @@
 import React from "react";
 import TaskFilter from "./TaskFilter";
+import PropTypes from "prop-types";
 
 const Footer = ({
   itemCount,
@@ -23,6 +24,19 @@ const Footer = ({
       </button>
     </footer>
   );
+};
+
+Footer.propTypes = {
+  itemCount: PropTypes.number.isRequired,
+  onFilterAll: PropTypes.func.isRequired,
+  onFilterActive: PropTypes.func.isRequired,
+  onFilterCompleted: PropTypes.func.isRequired,
+  currentFilter: PropTypes.oneOf("all", "active", "completed").isRequired,
+  clearCompleted: PropTypes.func.isRequired,
+};
+
+Footer.defaultProps = {
+  itemCount: 0,
 };
 
 export default Footer;
